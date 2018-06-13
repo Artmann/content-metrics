@@ -5,8 +5,8 @@ class SplitChartMeter {
   constructor(metricName, dataSets, isMonetary) {
     this.metricName = metricName;
     this.dataSets = dataSets;
-    this.isMonetary = isMonetary;
-  
+    this.isMonetary = isMonetary || false;
+
     this._render();
   }
 
@@ -38,20 +38,18 @@ class SplitChartMeter {
     });
 
     const size = 162;
-    
+
     const svg = select(this.container)
       .append('svg')
       .attr('width', size)
       .attr('height', size)
       .append('g');
-      
 
-    const content = svg.append('g');    
-    
+    const content = svg.append('g');
+
     this._createChart(content, size, dataPoints, colorA);
     this._createText(content, size, sums[0] + sums[1]);
     this._createMeter(svg, size, sums[0], sums[1], colorA, colorB);
-    
   }
 
   _createChart(parent, size, metrics, color) {
@@ -74,7 +72,7 @@ class SplitChartMeter {
       date: parseTime(m.date),
       value: +m.value
     }));
-      
+
     x.domain(extent(formattedMetrics, m => m.date));
     y.domain([0, max(formattedMetrics, m => m.value)])
 
@@ -130,6 +128,7 @@ class SplitChartMeter {
       .attr('text-anchor', 'middle')
       .attr('alignment-baseline', 'central')
       .attr('style', "fill: #000; font-size: 22px; font-family: 'Roboto', sans-serif")
+      .attr('data-test-sum', true)
       .text(text);
 
     parent
@@ -139,6 +138,7 @@ class SplitChartMeter {
       .attr('alignment-baseline', 'central')
       .attr('text-anchor', 'middle')
       .attr('style', "fill: #a8a8a8; font-size: 15px; font-family: 'Roboto', sans-serif; text-transform: uppercase;")
+      .attr('data-test-metric-name', true)
       .text(this.metricName);
   }
 }
