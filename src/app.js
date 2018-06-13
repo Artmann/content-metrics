@@ -38,7 +38,6 @@ class App {
   }
 
   render() {
-    console.log('qweqewqwe');
     this.children.forEach((child) => {
       this.app.appendChild(child.getElement());
     });
